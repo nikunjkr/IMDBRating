@@ -2,8 +2,13 @@ var axios = require("axios").default;
 
 const prompt = require('prompt-sync')();
 
-// Asking user for movie/title name
-const movie_name = prompt('Enter Movie');
+/* Asking user for movie/title name
+  Sample Inputs :
+  Enter MovieKal Ho Naa Ho,
+  The Priest
+
+*/
+const movie_name = prompt('Enter Movie -');
 movie_name.toLowerCase();
 
 
@@ -18,7 +23,7 @@ var get_title = {
 };
 
 // t_canst is used to store the title number
-var t_const 
+var t_const ;
 
 var get_rating = {
   method: 'GET',
@@ -32,25 +37,30 @@ var get_rating = {
 
 axios.request(get_title).then(function (response) {
   
-  const data = response.data.d
+  const data = response.data.d;
   
-  const data_length = data.length 
+  const data_length = data.length;
   const alternatives= [];
-  // console.log(array_length)
+  
   for(let i = 0; i < data_length; ++i){
-    // console.log(i)
     
-    const candidate = data[i].l
+    const candidate = data[i].l;
+    candidate.toLowerCase();
+
     if(candidate==movie_name){
-      get_rating.params.tconst = data[i].id
+      get_rating.params.tconst = data[i].id;
       axios.request(get_rating).then(function (response) {
-        // console.log(response);
-        console.log("Rating" +"-"+response.data.rating)
+        const rating = response.data.rating;
+        if(rating == undefined){
+          console.log("Rating of this movie is not available")
+          return;
+        }
+        console.log("Rating" +"-"+rating)
       }).catch(function (error) {
       console.error(error);
-      console.log("Something went wrong")
+      console.log("Something went wrong");
       })
-      break
+      break;
     }
     else{
       alternatives.push(candidate);
